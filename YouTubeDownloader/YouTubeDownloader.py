@@ -35,18 +35,21 @@ class Ui_YouTubeDownloader(object):
     def downloadVideos(self):
         root = tk.Tk()
         root.withdraw()
-        file = filedialog.askdirectory()
+        destinationDir = "\"" + filedialog.askdirectory() + "\""
+        destinationDir = destinationDir.replace("/", "\\")
         youtube_link = self.textEdit.text()
-        copy_file = "move *.mp4 " + file        
-        copy_file = copy_file.replace("/", "\\")
+        copy_file = "move *.mp4 " + destinationDir
 
         print(copy_file)
 
-        commands = ["cd " + file, "youtube-dl.exe " + youtube_link, copy_file, "start " + file]
+        commands = ["youtube-dl.exe " + youtube_link,
+                    copy_file]
         
         for item in commands:
             print(item)
             os.system(item)
+
+        os.startfile(destinationDir)
 
 if __name__ == "__main__":
     import sys
