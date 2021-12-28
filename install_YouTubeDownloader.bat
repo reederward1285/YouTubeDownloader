@@ -8,7 +8,7 @@ python get-pip.py
 python -m pip install --upgrade pip
 
 :: install youtube downloader
-pip install youtube_dl
+pip install youtube_dl pyqt5
 
 :: install tkinter
 pip install tk

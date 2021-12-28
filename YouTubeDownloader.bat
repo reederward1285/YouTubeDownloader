@@ -1,1 +1,1 @@
-python3 YouTubeDownloader/YouTubeDownloader.py
+python YouTubeDownloader/YouTubeDownloader.py
