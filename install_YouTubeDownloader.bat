@@ -12,7 +12,3 @@ pip install youtube_dl pyqt5
 
 :: install tkinter
 pip install tk
-
-:: run the program
-python3 YouTubeDownloader/YouTubeDownloader.py
-python YouTubeDownloader/YouTubeDownloader.py
