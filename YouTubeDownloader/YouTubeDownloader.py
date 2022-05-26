@@ -4,8 +4,8 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 
-
 class Ui_YouTubeDownloader(object):
+
     def setupUi(self, YouTubeDownloader):
         YouTubeDownloader.setObjectName("YouTubeDownloader")
         YouTubeDownloader.resize(800, 600)
@@ -18,6 +18,9 @@ class Ui_YouTubeDownloader(object):
         self.pushButton = QtWidgets.QPushButton(YouTubeDownloader)
         self.pushButton.setGeometry(QtCore.QRect(60, 250, 121, 30))
         self.pushButton.setObjectName("pushButton")
+        self.pushButton1 = QtWidgets.QPushButton(YouTubeDownloader)
+        self.pushButton1.setGeometry(QtCore.QRect(200, 500, 400, 30))
+        self.pushButton1.setObjectName("pushButton1")
 
         self.retranslateUi(YouTubeDownloader)
         QtCore.QMetaObject.connectSlotsByName(YouTubeDownloader)
@@ -26,30 +29,53 @@ class Ui_YouTubeDownloader(object):
         _translate = QtCore.QCoreApplication.translate
         YouTubeDownloader.setWindowTitle(_translate("YouTubeDownloader", "YouTubeDownloader"))
         self.label.setText(_translate("YouTubeDownloader", "Put your youtube link here:"))
-        self.pushButton.setText(_translate("YouTubeDownloader", "Download"))
+        self.pushButton.setText(_translate("YouTubeDownloader", "Add"))
+        self.pushButton1.setText(_translate("YouTubeDownloader", "Download"))
 
         self.pushButton.adjustSize()
-        self.pushButton.clicked.connect(self.downloadVideos)
+        self.pushButton.clicked.connect(self.add)
+        self.pushButton1.adjustSize()
+        self.pushButton1.clicked.connect(self.downloadVideos)
         self.label.adjustSize()
 
-    def downloadVideos(self):
+    def add(self):
         root = tk.Tk()
         root.withdraw()
         destinationDir = "\"" + filedialog.askdirectory() + "\""
         destinationDir = destinationDir.replace("/", "\\")
-        youtube_link = self.textEdit.text()
-        copy_file = "move *.mp4 " + destinationDir
 
-        print(copy_file)
+        if (len(self.textEdit.text()) == 0):
+            return
+        else:
+            copy_file = "move *.mp4 " + destinationDir
 
-        commands = ["youtube-dl.exe " + youtube_link,
-                    copy_file]
-        
-        for item in commands:
-            print(item)
-            os.system(item)
+            youTubeLinkFile = open("links.txt", "a")
+            youTubeLinkFile.write("youtube-dl.exe " + self.textEdit.text() + "\n")
+            youTubeLinkFile.write(copy_file + "\n")
+            youTubeLinkFile.close()
 
-        os.startfile(destinationDir)
+            youTubeFolderFile = open("folders.txt", "a")
+            youTubeFolderFile.write(destinationDir + "\n")
+            youTubeFolderFile.close()
+
+            self.textEdit.clear()
+
+    def downloadVideos(self):
+        with open("links.txt") as file:
+            commands = file.readlines()
+            commands = [line.rstrip() for line in commands]
+            for item in commands:
+                print(item)
+                os.system(item)
+        with open("folders.txt") as file:
+            commands = file.readlines()
+            commands = [line.rstrip() for line in commands]
+            for item in commands:
+                print(item)
+                os.system(item)
+
+        os.remove("links.txt")
+        os.remove("folders.txt")
 
 if __name__ == "__main__":
     import sys
