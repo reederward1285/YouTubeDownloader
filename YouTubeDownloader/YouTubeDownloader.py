@@ -38,27 +38,35 @@ class Ui_YouTubeDownloader(object):
         self.pushButton1.clicked.connect(self.downloadVideos)
         self.label.adjustSize()
 
+    # add a new video/playlist to links and folders queue
     def add(self):
-        root = tk.Tk()
-        root.withdraw()
-        destinationDir = "\"" + filedialog.askdirectory() + "\""
-        destinationDir = destinationDir.replace("/", "\\")
-
+        # exit if no video link is there
         if (len(self.textEdit.text()) == 0):
             return
-        else:
-            copy_file = "move *.mp4 " + destinationDir
 
-            youTubeLinkFile = open("links.txt", "a")
-            youTubeLinkFile.write("youtube-dl.exe " + self.textEdit.text() + "\n")
-            youTubeLinkFile.write(copy_file + "\n")
-            youTubeLinkFile.close()
+        root = tk.Tk()
+        root.withdraw()
 
-            youTubeFolderFile = open("folders.txt", "a")
-            youTubeFolderFile.write(destinationDir + "\n")
-            youTubeFolderFile.close()
+        # file dialog for dir to save video(s)
+        destinationDir = filedialog.askdirectory()
+        # fix the dir string so it can be used on command line later
+        destinationDir = destinationDir.replace("/", "\\")
 
-            self.textEdit.clear()
+        # make cmd string for copying the video file(s) to dest dir
+        copy_file = "move *.mp4 " + destinationDir
+
+        # add commands for downloading the youtube video and copying
+        # it to dest dir to links.txt file
+        youTubeLinkFile = open("links.txt", "a")
+        youTubeLinkFile.write("youtube-dl.exe " + self.textEdit.text() + "\n")
+        youTubeLinkFile.write(copy_file + "\n")
+        youTubeLinkFile.close()
+
+        youTubeFolderFile = open("folders.txt", "a")
+        youTubeFolderFile.write("start " + destinationDir + "\n")
+        youTubeFolderFile.close()
+
+        self.textEdit.clear()
 
     def downloadVideos(self):
         with open("links.txt") as file:
