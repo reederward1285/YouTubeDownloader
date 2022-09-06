@@ -48,7 +48,7 @@ class Ui_YouTubeDownloader(object):
         root.withdraw()
 
         # file dialog for dir to save video(s)
-        destinationDir = filedialog.askdirectory()
+        destinationDir = "\"" + filedialog.askdirectory() + "\""
         # fix the dir string so it can be used on command line later
         destinationDir = destinationDir.replace("/", "\\")
 
@@ -63,7 +63,7 @@ class Ui_YouTubeDownloader(object):
         youTubeLinkFile.close()
 
         youTubeFolderFile = open("folders.txt", "a")
-        youTubeFolderFile.write("start " + destinationDir + "\n")
+        youTubeFolderFile.write("start \"\" " + destinationDir + "\n")
         youTubeFolderFile.close()
 
         self.textEdit.clear()
